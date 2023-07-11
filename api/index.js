@@ -89,26 +89,32 @@ function getSonnets() {
 }
 
 async function couplet(keyword) {
-  const text = await rhymeLastWord(await requestWiki(keyword));
-  const matchableRhymes = getSonnets();
+  try {
+    const wiki = await requestWiki(keyword)
+    const text = await rhymeLastWord(wiki);
+    const matchableRhymes = getSonnets();
 
-  let couplets = [];
-  let ret;
-  text.forEach((x) => {
-    matchableRhymes.forEach((y) => {
-      if (
-        x.rhymes.includes(y.last) &&
-        x.sentence.length > 0 &&
-        y.sentence.length > 0
-      ) {
-        couplets.push([x.sentence.join(' '), y.sentence]);
-        const random =
-          couplets[Math.floor(Math.random() * couplets.length)].join('\n');
-        ret = { message: random, title: y.title, author: y.author };
-      }
-    });
-  });
-  return ret ? ret : { message: 'nothing found :(', error: true };
+    let couplets = [];
+    let ret;
+    text.forEach((x) => {
+      matchableRhymes.forEach((y) => {
+        if (
+          x.rhymes.includes(y.last) &&
+          x.sentence.length > 0 &&
+          y.sentence.length > 0
+        ) {
+          couplets.push([x.sentence.join(' '), y.sentence]);
+          const random =
+            couplets[Math.floor(Math.random() * couplets.length)].join('\n');
+          ret = { message: random, title: y.title, author: y.author };
+        }
+      });
+    }); 
+    return ret ? ret : { message: 'no rhymes found :(', error: true };
+  }
+  catch(error) {
+    return { message: 'no wiki article found :(', error: true };
+  }
 }
 
 app.get('/', async (req, res) => {
