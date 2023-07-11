@@ -11,7 +11,7 @@ var corsOptions = {
 function getSentences(text) {
   let sentences = [];
   text.split('. ').map(function(sentence) {
-    if (sentence.split(' ').length > 10 && sentence.split(' ').length < 20) {
+    if (sentence.split(' ').length > 0 && sentence.split(' ').length < 20) {
     sentences.push({sentence: sentence.split(' ').filter((val) => val !== "")})
   }})
   return sentences;
@@ -61,7 +61,7 @@ async function couplet(keyword1, keyword2) {
   const matchableRhymes = []
 
   sentences.forEach(x => {
-    if (x.split(' ').length > 10 && x.split(' ').length < 20) {
+    if (x.split(' ').length > 0 && x.split(' ').length < 20) {
     const last = x.split(' ').pop()
     matchableRhymes.push({ sentence: x, last}) //last words from keyword2
       }
