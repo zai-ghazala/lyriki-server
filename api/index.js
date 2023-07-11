@@ -2,6 +2,8 @@ const express = require('express');
 const app = express();
 const port = 3000
 const cors = require('cors')
+const syl = require('syllabificate')
+const sonnets = require('./sonnets.js')
 
 var corsOptions = {
   origin: ['https://lyriki.zaiz.ai', 'https://www.lyriki.zaiz.ai', 'http://127.0.0.1:5173', 'http://localhost:5173'],
@@ -11,7 +13,8 @@ var corsOptions = {
 function getSentences(text) {
   let sentences = [];
   text.split('. ').map(function(sentence) {
-    if (sentence.split(' ').length > 0 && sentence.split(' ').length < 20) {
+    if (sentence.split(' ').length > 0 && syl.countSyllables(sentence) > 7 && syl.countSyllables(sentence) < 15) {
+      console.log(sentence)
     sentences.push({sentence: sentence.split(' ').filter((val) => val !== "")})
   }})
   return sentences;
@@ -54,22 +57,25 @@ async function requestWiki(keyword) {
   return cleaned;
 }
 
-async function couplet(keyword1, keyword2) {
-  const usableText1 = await rhymeLastWord(await requestWiki(keyword1))
-  const usableText2 = await requestWiki(keyword2)
-  const sentences = usableText2.split('. ')
+function getSonnets() {
   const matchableRhymes = []
 
-  sentences.forEach(x => {
-    if (x.split(' ').length > 0 && x.split(' ').length < 20) {
-    const last = x.split(' ').pop()
-    matchableRhymes.push({ sentence: x, last}) //last words from keyword2
-      }
+  sonnets.forEach(x => {
+    x.lines.forEach(y => {
+    const last = y.split(' ').pop()
+    matchableRhymes.push({ sentence: y, last}) //last words from keyword2
+      })
     })
+    return matchableRhymes
+}
+
+async function couplet(keyword) {
+  const text = await rhymeLastWord(await requestWiki(keyword))
+  const matchableRhymes = getSonnets()
   
   let couplets = [];
   let random;
-  usableText1.forEach(x => {
+  text.forEach(x => {
     matchableRhymes.forEach(y => {
       if (x.rhymes.includes(y.last) && x.sentence.length > 0 && y.sentence.length > 0) {
         couplets.push([x.sentence.join(' '), y.sentence])
@@ -85,11 +91,11 @@ app.get('/', async (req, res) => {
 })
 app.get('/api', cors(corsOptions), async (req, res) => {
 
-  if (!req.query.keyword1 || !req.query.keyword2) {
+  if (!req.query.keyword) {
     return res.send('You must provide keywords')
   }
   else {
-    const result = await couplet(req.query.keyword1, req.query.keyword2);
+    const result = await couplet(req.query.keyword);
     res.send(result)
   }
 })
