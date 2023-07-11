@@ -13,7 +13,7 @@ var corsOptions = {
 function getSentences(text) {
   let sentences = [];
   text.split('. ').map(function(sentence) {
-    if (sentence.split(' ').length > 0 && syl.countSyllables(sentence) > 9 && syl.countSyllables(sentence) < 11) {
+    if (sentence.split(' ').length > 0 && syl.countSyllables(sentence) > 8 && syl.countSyllables(sentence) < 12) {
     sentences.push({sentence: sentence.split(' ').filter((val) => val !== "")})
   }})
   return sentences;
@@ -62,7 +62,7 @@ function getSonnets() {
   sonnets.forEach(x => {
     x.lines.forEach(y => {
     const last = y.split(' ').pop()
-    matchableRhymes.push({ sentence: y, last}) //last words from keyword2
+    matchableRhymes.push({ sentence: y, last, title: x.title, author: x.author }) //last words from keyword2
       })
     })
     return matchableRhymes
@@ -73,15 +73,16 @@ async function couplet(keyword) {
   const matchableRhymes = getSonnets()
   
   let couplets = [];
-  let random;
+  let ret;
   text.forEach(x => {
     matchableRhymes.forEach(y => {
       if (x.rhymes.includes(y.last) && x.sentence.length > 0 && y.sentence.length > 0) {
         couplets.push([x.sentence.join(' '), y.sentence])
-        random = couplets[Math.floor(Math.random() * couplets.length)].join('\n')
+        const random = couplets[Math.floor(Math.random() * couplets.length)].join('\n')
+        ret = { random, title: y.title, author: y.author }
       }})
   })
-  return random ? random : 'nothing found :('
+  return ret ? ret : 'nothing found :('
 }
 
 
