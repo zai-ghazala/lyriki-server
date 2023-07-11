@@ -4,7 +4,7 @@ const port = 3000
 const cors = require('cors')
 
 var corsOptions = {
-  origin: ['https://wikiwords.zaiz.ai', 'https://www.wikiwords.zaiz.ai', 'http://127.0.0.1:5173', 'http://localhost:5173'],
+  origin: ['https://wikilyrics.zaiz.ai', 'https://www.wikilyrics.zaiz.ai', 'http://127.0.0.1:5173', 'http://localhost:5173'],
   optionsSuccessStatus: 200 
 }
 
