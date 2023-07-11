@@ -44,7 +44,7 @@ async function requestDatamuse(word) {
 }
 
 async function requestWiki(keyword) {
-  const response = await fetch(`https://simple.wikipedia.org/w/api.php?action=query&titles=${keyword}&prop=extracts&format=json`);
+  const response = await fetch(`https://en.wikipedia.org/w/api.php?action=query&titles=${keyword}&prop=extracts&format=json`);
   const json = await response.json()
   const text = json.query.pages
   const extract = text[Object.keys(text)].extract
@@ -65,14 +65,16 @@ async function couplet(keyword1, keyword2) {
     })
   
   let couplets = [];
+  let random;
 
   usableText1.forEach(x => {
     matchableRhymes.forEach(y => {
       if (x.rhymes.includes(y.last) && x.sentence.length > 3 && y.sentence.length > 3) {
         couplets.push([x.sentence.join(' '), y.sentence])
+        random = couplets[Math.floor(Math.random() * couplets.length)].join('\n')
       }})
   })
-  return couplets[Math.floor(Math.random() * couplets.length)];
+  return random ? random : 'nothing found :('
 }
 
 
@@ -82,11 +84,11 @@ app.get('/', async (req, res) => {
 app.get('/api', cors(corsOptions), async (req, res) => {
 
   if (!req.query.keyword1 && !req.query.keyword2) {
-    return res.send({error: 'You must provide keywords'})
+    return res.send('You must provide keywords')
   }
   else {
     const result = await couplet(req.query.keyword1, req.query.keyword2);
-    res.send(result.join('\n'))
+    res.send(result)
   }
 })
 
