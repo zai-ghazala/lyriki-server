@@ -85,7 +85,7 @@ function getSonnets() {
         last,
         title: x.title,
         author: x.author,
-      }); //last words from keyword2
+      });
     });
   });
   return matchableRhymes;
