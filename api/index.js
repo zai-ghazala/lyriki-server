@@ -2,7 +2,6 @@ const express = require('express');
 const app = express();
 const port = 3000
 const cors = require('cors')
-const syl = require('syllabificate')
 
 var corsOptions = {
   origin: ['https://lyriki.zaiz.ai', 'https://www.lyriki.zaiz.ai', 'http://127.0.0.1:5173', 'http://localhost:5173'],
@@ -12,7 +11,7 @@ var corsOptions = {
 function getSentences(text) {
   let sentences = [];
   text.split('. ').map(function(sentence) {
-    if (syl.countSyllables(sentence) === 10) {
+    if (sentence.split(' ').length > 10 && sentence.split(' ').length < 20) {
     sentences.push({sentence: sentence.split(' ').filter((val) => val !== "")})
   }})
   return sentences;
@@ -62,7 +61,7 @@ async function couplet(keyword1, keyword2) {
   const matchableRhymes = []
 
   sentences.forEach(x => {
-    if (syl.countSyllables(x) === 10)  {
+    if (x.split(' ').length > 10 && x.split(' ').length < 20) {
     const last = x.split(' ').pop()
     matchableRhymes.push({ sentence: x, last}) //last words from keyword2
       }
