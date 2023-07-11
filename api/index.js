@@ -81,7 +81,7 @@ function getSonnets() {
     x.lines.forEach((y) => {
       const last = y.split(' ').pop();
       matchableRhymes.push({
-        sentence,
+        sentence: y,
         last,
         title: x.title,
         author: x.author,
