@@ -11,9 +11,8 @@ var corsOptions = {
 function getSentences(text) {
   let sentences = [];
   text.split('. ').map(function(sentence) {
-    if (sentence.length > 5 && sentence.length < 20) {
       sentences.push({sentence: sentence.split(' ').filter((val) => val !== "")})
-  }})
+  })
   return sentences;
 }
 
