@@ -2,23 +2,22 @@ const express = require('express');
 const app = express();
 const port = 3000
 const cors = require('cors')
-const syl = require('syllabificate');
 
 var corsOptions = {
   origin: ['http://127.0.0.1:5173/'],
   optionsSuccessStatus: 200 
 }
 
-function syllableCounter(text) {
-  let sylCount = [];
+function getSentences(text) {
+  let sentences = [];
   text.split('. ').map(function(sentence) {
-    sylCount.push({sentence: sentence.split(' ').filter((val) => val !== ""), sylCount: syl.countSyllables(sentence)})
+    sentences.push({sentence: sentence.split(' ').filter((val) => val !== "")})
   })
-  return sylCount;
+  return sentences;
 }
 
 async function rhymeLastWord(text) {
-  const allRhymes = await Promise.all(syllableCounter(text).map(async function(x) {
+  const allRhymes = await Promise.all(getSentences(text).map(async function(x) {
       const last = x.sentence[x.sentence.length - 1];
       const rhymeRequests = await requestDatamuse(last);
       return ({ sentence: x.sentence, rhymes: rhymeRequests });
