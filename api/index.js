@@ -5,86 +5,91 @@ const cors = require('cors')
 const syl = require('syllabificate');
 
 var corsOptions = {
-  origin: ['https://emoji575.zaiz.ai', 'https://www.emoji575.zaiz.ai', 'http://127.0.0.1:5173', 'http://localhost:5173'],
+  origin: ['http://127.0.0.1:5173/'],
   optionsSuccessStatus: 200 
 }
 
-function validateHaiku(text) {
-  let lines = text?.trim().split(/\r?\n/)
-  let errored = false
+function syllableCounter(text) {
+  let sylCount = [];
+  text.split('. ').map(function(sentence) {
+    sylCount.push({sentence: sentence.split(' ').filter((val) => val !== ""), sylCount: syl.countSyllables(sentence)})
+  })
+  return sylCount;
+}
 
-  if (lines.length !== 3) {
-    errored = true
-  } else {
-    lines.forEach((line, idx) => {
-      line = line.replace('’', '\'')
-      const s = syl.countSyllables(line)
-      const allowed = idx !== 1 ? 5 : 7
-      const isValid = s === allowed
-      if (!isValid) {
-        errored = true
-      }
+async function rhymeLastWord(text) {
+  const allRhymes = await Promise.all(syllableCounter(text).map(async function(x) {
+      const last = x.sentence[x.sentence.length - 1];
+      const rhymeRequests = await requestDatamuse(last);
+      return ({ sentence: x.sentence, rhymes: rhymeRequests });
+  }))
+  for (let key in allRhymes) {
+    if (allRhymes[key] === undefined) {
+      delete allRhymes[key];
+    }
+  }
+  const array = []
+
+  allRhymes.map(function(x) {
+    if (x.rhymes.length > 20) {
+      array.push({sentence: x.sentence, rhymes: x.rhymes})
+    }
+  })
+  return array;
+}
+
+async function requestDatamuse(word) {
+  const response = await fetch(`https://api.datamuse.com/words?rel_rhy=${word}`);
+  const json = await response.json()
+  return json.map(x => x.word);
+}
+
+async function requestWiki(keyword) {
+  const response = await fetch(`https://en.wikipedia.org/w/api.php?action=query&titles=${keyword}&prop=extracts&format=json`);
+  const json = await response.json()
+  const text = json.query.pages
+  const extract = text[Object.keys(text)].extract
+  const cleaned = extract.replace(/<\/?[^>]+(>|$)/g, " ")
+
+  return cleaned;
+}
+
+async function couplet(keyword1, keyword2) {
+  const usableText1 = await rhymeLastWord(await requestWiki(keyword1))
+  const usableText2 = await requestWiki(keyword2)
+  const sentences = usableText2.split('. ')
+  const matchableRhymes = []
+
+  sentences.forEach(x => {
+    const last = x.split(' ').pop()
+    matchableRhymes.push({ sentence: x, last}) //last words from keyword2
     })
-  }
-  return errored;
-}
+  
+  let couplets = [];
 
-async function getValidHaiku(text) {
-  let haiku;
-  do {
-    haiku = await requestHaiku(text)
-  } while (validateHaiku(haiku))
-  return haiku;
-}
-
-function smarten(string)  {
-  string = string.replace(/(^|[-\u2014/([{"\s])'/g, '$1\u2018'); // opening singles
-  string = string.replace(/'/g, '\u2019'); // closing singles & apostrophes
-  string = string.replace(/(^|[-\u2014/([{\u2018\s])"/g, '$1\u201c'); // opening doubles
-  string = string.replace(/"/g, '\u201d'); // closing doubles
-  string = string.replace(/--/g, '\u2014'); // em-dashes
-
-  return string;
-};
-
-async function requestHaiku(text) {
-  const options = {
-    method: 'POST',
-    headers: {
-      'content-type': 'application/json',
-      'X-RapidAPI-Key': process.env.RAPID_API_KEY,
-      'X-RapidAPI-Host': process.env.RAPID_API_HOST,
-    },
-    body: `{"model":"gpt-3.5-turbo","messages":[{"role":"user","content": "Generate a haiku from the following keywords: ${text}."}]}`,
-  }
-  let response = await fetch(process.env.RAPID_API_URL, options)
-  let json = await response.json()
-  console.log(json)
-  let haiku = json.choices[0].message.content
-  return smarten(haiku);
+  usableText1.forEach(x => {
+    matchableRhymes.forEach(y => {
+      if (x.rhymes.includes(y.last)) {
+        couplets.push([x.sentence.join(' '), y.sentence])
+      }})
+  })
+  return couplets[Math.floor(Math.random() * couplets.length)];
 }
 
 
-
-if (process.env.NODE_ENV !== 'production') {
-  require('dotenv-safe').config()
-}
 app.get('/', async (req, res) => {
-  res.send('Emoji 575')
+  res.send('Wikiwords')
 })
 app.get('/api', cors(corsOptions), async (req, res) => {
 
-  if (!req.query.text) {
+  if (!req.query.keyword1 && !req.query.keyword2) {
     return res.send({error: 'You must provide keywords'})
   }
   else {
-    const result = await requestHaiku(req.query.text);
-
-    if (!req.query.response_url) {
-      res.send(result)}
-    else {
-      res.send({response_type: "in_channel", text: result})
-  }}})
+    const result = await couplet(req.query.keyword1, req.query.keyword2);
+    res.send(result.join('<br/>'))
+  }
+})
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`)
