@@ -110,10 +110,10 @@ async function couplet(keyword) {
         }
       });
     }); 
-    return ret ? ret : { message: 'no rhymes found :(', error: true };
+    return ret ? ret : { message: 'No rhymes found :(', error: true };
   }
   catch(error) {
-    return { message: 'no wiki article found :(', error: true };
+    return { message: 'No wiki article found :(', error: true };
   }
 }
 
@@ -122,7 +122,7 @@ app.get('/', async (req, res) => {
 });
 app.get('/api', cors(corsOptions), async (req, res) => {
   if (!req.query.keyword) {
-    return res.send({ message: 'You must provide a keyword', error: true });
+    return res.send({ message: 'Please provide a search term', error: true });
   } else {
     const result = await couplet(req.query.keyword);
     res.send(result);
