@@ -68,7 +68,7 @@ async function couplet(keyword1, keyword2) {
 
   usableText1.forEach(x => {
     matchableRhymes.forEach(y => {
-      if (x.rhymes.includes(y.last)) {
+      if (x.rhymes.includes(y.last) && x.sentence.length > 3 && y.sentence.length > 3) {
         couplets.push([x.sentence.join(' '), y.sentence])
       }})
   })
