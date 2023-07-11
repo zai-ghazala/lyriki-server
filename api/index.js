@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const port = 3000
 const cors = require('cors')
+const syl = require('syllabificate')
 
 var corsOptions = {
   origin: ['https://lyriki.zaiz.ai', 'https://www.lyriki.zaiz.ai', 'http://127.0.0.1:5173', 'http://localhost:5173'],
@@ -11,7 +12,7 @@ var corsOptions = {
 function getSentences(text) {
   let sentences = [];
   text.split('. ').map(function(sentence) {
-    if (sentence.split(' ').length > 10 && sentence.split(' ').length < 20) {
+    if (syl.countSyllables(sentence) === 10) {
     sentences.push({sentence: sentence.split(' ').filter((val) => val !== "")})
   }})
   return sentences;
@@ -31,7 +32,7 @@ async function rhymeLastWord(text) {
   const array = []
 
   allRhymes.map(function(x) {
-    if (x.rhymes.length > 10) {
+    if (x.rhymes.length > 0) {
       array.push({sentence: x.sentence, rhymes: x.rhymes})
     }
   })
@@ -61,7 +62,7 @@ async function couplet(keyword1, keyword2) {
   const matchableRhymes = []
 
   sentences.forEach(x => {
-    if (x.split(' ').length > 10 && x.split(' ').length < 20) {
+    if (syl.countSyllables(x) === 10)  {
     const last = x.split(' ').pop()
     matchableRhymes.push({ sentence: x, last}) //last words from keyword2
       }
@@ -71,7 +72,7 @@ async function couplet(keyword1, keyword2) {
   let random;
   usableText1.forEach(x => {
     matchableRhymes.forEach(y => {
-      if (x.rhymes.includes(y.last) && x.sentence.length > 3 && y.sentence.length > 3) {
+      if (x.rhymes.includes(y.last) && x.sentence.length > 0 && y.sentence.length > 0) {
         couplets.push([x.sentence.join(' '), y.sentence])
         random = couplets[Math.floor(Math.random() * couplets.length)].join('\n\n')
       }})
