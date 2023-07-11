@@ -79,7 +79,7 @@ async function couplet(keyword1, keyword2) {
 
 
 app.get('/', async (req, res) => {
-  res.send('Wikiwords')
+  res.send('Wikilyrics')
 })
 app.get('/api', cors(corsOptions), async (req, res) => {
 
