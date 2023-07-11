@@ -13,7 +13,7 @@ var corsOptions = {
 function getSentences(text) {
   let sentences = [];
   text.split('. ').map(function(sentence) {
-    if (sentence.split(' ').length > 0 && syl.countSyllables(sentence) > 7 && syl.countSyllables(sentence) < 15) {
+    if (sentence.split(' ').length > 0 && syl.countSyllables(sentence) > 9 && syl.countSyllables(sentence) < 11) {
     sentences.push({sentence: sentence.split(' ').filter((val) => val !== "")})
   }})
   return sentences;
