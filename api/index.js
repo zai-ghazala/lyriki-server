@@ -83,7 +83,7 @@ app.get('/', async (req, res) => {
 })
 app.get('/api', cors(corsOptions), async (req, res) => {
 
-  if (!req.query.keyword1 && !req.query.keyword2) {
+  if (!req.query.keyword1 || !req.query.keyword2) {
     return res.send('You must provide keywords')
   }
   else {
