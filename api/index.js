@@ -86,7 +86,7 @@ app.get('/api', cors(corsOptions), async (req, res) => {
   }
   else {
     const result = await couplet(req.query.keyword1, req.query.keyword2);
-    res.send(result.join('<br/>'))
+    res.send(result.join('\n'))
   }
 })
 
