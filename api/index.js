@@ -73,7 +73,7 @@ async function couplet(keyword1, keyword2) {
     matchableRhymes.forEach(y => {
       if (x.rhymes.includes(y.last) && x.sentence.length > 3 && y.sentence.length > 3) {
         couplets.push([x.sentence.join(' '), y.sentence])
-        random = couplets[Math.floor(Math.random() * couplets.length)].join('\n')
+        random = couplets[Math.floor(Math.random() * couplets.length)].join('\n\n')
       }})
   })
   return random ? random : 'nothing found :('
