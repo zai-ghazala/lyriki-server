@@ -79,10 +79,10 @@ async function couplet(keyword) {
       if (x.rhymes.includes(y.last) && x.sentence.length > 0 && y.sentence.length > 0) {
         couplets.push([x.sentence.join(' '), y.sentence])
         const random = couplets[Math.floor(Math.random() * couplets.length)].join('\n')
-        ret = { random, title: y.title, author: y.author }
+        ret = { message: random, title: y.title, author: y.author }
       }})
   })
-  return ret ? ret : 'nothing found :('
+  return ret ? ret : { message: 'nothing found :(', error: true}
 }
 
 
@@ -90,9 +90,8 @@ app.get('/', async (req, res) => {
   res.send('Lyriki')
 })
 app.get('/api', cors(corsOptions), async (req, res) => {
-
   if (!req.query.keyword) {
-    return res.send('You must provide keywords')
+    return res.send({message: 'You must provide a keyword', error: true})
   }
   else {
     const result = await couplet(req.query.keyword);
