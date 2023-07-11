@@ -2,7 +2,6 @@ const express = require('express');
 const app = express();
 const port = 3000;
 const cors = require('cors');
-const syl = require('syllabificate');
 const sonnets = require('./sonnets.js');
 
 var corsOptions = {
@@ -19,9 +18,7 @@ function getSentences(text) {
   let sentences = [];
   text.split('. ').map(function (sentence) {
     if (
-      sentence.split(' ').length > 0 &&
-      syl.countSyllables(sentence) > 8 &&
-      syl.countSyllables(sentence) < 12
+      sentence.split(' ').length > 0 
     ) {
       sentences.push({
         sentence: sentence.split(' ').filter((val) => val !== ''),
