@@ -62,7 +62,7 @@ function getSonnets() {
   sonnets.forEach(x => {
     x.lines.forEach(y => {
     const last = y.split(' ').pop()
-    matchableRhymes.push({ sentence: y, last, title: x.title, author: x.author }) //last words from keyword2
+    matchableRhymes.push({ sentence: y.replace(' ', ''), last, title: x.title, author: x.author }) //last words from keyword2
       })
     })
     return matchableRhymes
