@@ -61,7 +61,7 @@ async function requestDatamuse(word) {
 
 async function requestWiki(keyword) {
   const response = await fetch(
-    `https://simple.wikipedia.org/w/api.php?action=query&titles=${keyword}&prop=extracts&format=json`
+    `https://en.wikipedia.org/w/api.php?action=query&titles=${keyword}&prop=extracts&format=json`
   );
   const json = await response.json();
   const text = json.query.pages;
