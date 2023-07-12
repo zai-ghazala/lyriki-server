@@ -3,6 +3,7 @@ const app = express();
 const port = 3000;
 const cors = require('cors');
 const sonnets = require('./sonnets.js');
+const syl = require('syllabificate');
 
 var corsOptions = {
   origin: [
@@ -18,7 +19,7 @@ function getSentences(text) {
   let sentences = [];
   text.split('. ').map(function (sentence) {
     if (
-      sentence.split(' ').length > 3 && sentence.split(' ').length < 30 && !sentence.split('').includes('.')
+      sentence.split(' ').length > 3 && syl.countSyllables(sentence) > 7 && syl.countSyllables(sentence) < 13 && !sentence.split('').includes('.')
     ) {
       sentences.push({
         sentence: sentence.split(' ').filter((val) => val !== ''),
