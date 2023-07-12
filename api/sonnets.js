@@ -868,9 +868,6 @@ module.exports = [
       "And when fair Aphrodite passed from earth,",
       "Her shrines forgotten and her feasts of mirth,",
       "A holier symbol still in seal and sign,",
-      "Sweet April took, of kingdom most divine,",
-      "When Christ ascended, in the time of birth",
-      "Of spring anemones, in Palestine."
     ],
     "linecount": "14"
   },
@@ -911,7 +908,6 @@ module.exports = [
       "But who shall give thee that grace to begin?",
       "Oh make thy self with holy mourning black,",
       "And red with blushing, as thou art with sin;",
-      "Or wash thee in Christ's blood, which hath this might",
       "That being red, it dyes red souls to white"
     ],
     "linecount": "14"
@@ -1089,27 +1085,6 @@ module.exports = [
       "And drown in it my sin's black memory;",
       "That thou remember them, some claim as debt,",
       "I think it mercy, if thou wilt forget."
-    ],
-    "linecount": "14"
-  },
-  {
-    "title": "Holy Sonnet XVIII: Show me, dear Christ, thy Spouse, so bright and clear",
-    "author": "John Donne",
-    "lines": [
-      "Show me, dear Christ, thy Spouse, so bright and clear.",
-      "What! is it She, which on the other shore",
-      "Goes richly painted? or which, robbed and tore,",
-      "Laments and mourns in Germany and here?",
-      "Sleeps she a thousand, then peeps up one year?",
-      "Is she self-truth and errs? now new, now outwore?",
-      "Doth she, and did she, and shall she evermore",
-      "On one, on seven, or on no hill appear?",
-      "Dwells she with us, or like adventuring knights",
-      "First travail we to seek and then make love?",
-      "Betray, kind husband, thy spouse to our sights,",
-      "And let mine amorous soul court thy mild dove,",
-      "Who is most true and pleasing to thee then",
-      "When she's embraced and open to most men."
     ],
     "linecount": "14"
   },
