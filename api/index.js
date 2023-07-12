@@ -18,7 +18,7 @@ function getSentences(text) {
   let sentences = [];
   text.split('. ').map(function (sentence) {
     if (
-      sentence.split(' ').length > 0 && sentence.split(' ').length < 30 && !sentence.split('').includes('.')
+      sentence.split(' ').length > 3 && sentence.split(' ').length < 30 && !sentence.split('').includes('.')
     ) {
       sentences.push({
         sentence: sentence.split(' ').filter((val) => val !== ''),
@@ -44,7 +44,7 @@ async function rhymeLastWord(text) {
   const array = [];
 
   allRhymes.map(function (x) {
-    if (x.rhymes.length > 0) {
+    if (x.rhymes.length > 3) {
       array.push({ sentence: x.sentence, rhymes: x.rhymes });
     }
   });
@@ -100,8 +100,8 @@ async function couplet(keyword) {
       matchableRhymes.forEach((y) => {
         if (
           x.rhymes.includes(y.last) &&
-          x.sentence.length > 0 &&
-          y.sentence.length > 0
+          x.sentence.length > 3 &&
+          y.sentence.length > 3
         ) {
           couplets.push([x.sentence.join(' '), y.sentence]);
           const random =
