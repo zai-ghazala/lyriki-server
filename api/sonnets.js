@@ -892,7 +892,6 @@ module.exports = [
       "But oh it must be burnt! alas the fire",
       "Of lust and envy have burnt it heretofore,",
       "And made it fouler: Let their flames retire,",
-      "And burn me, O Lord, with a fiery zeal",
       "Of Thee and Thy house, which doth in eating heal."
     ],
     "linecount": "14"
@@ -2876,7 +2875,6 @@ module.exports = [
     "title": "Sonnet 26: Lord of my love, to whom in vassalage",
     "author": "William Shakespeare",
     "lines": [
-      "Lord of my love, to whom in vassalage",
       "Thy merit hath my duty strongly knit,",
       "To thee I send this written embassage,",
       "To witness duty, not to show my wit:",
@@ -3344,7 +3342,6 @@ module.exports = [
       "And yet this time removed was summer's time;",
       "The teeming autumn, big with rich increase,",
       "Bearing the wanton burden of the prime,",
-      "Like widow'd wombs after their lords' decease:",
       "Yet this abundant issue seem'd to me",
       "But hope of orphans, and unfather'd fruit;",
       "For summer and his pleasures wait on thee,",
