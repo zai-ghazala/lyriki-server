@@ -3,7 +3,6 @@ const app = express();
 const port = 3000;
 const cors = require('cors');
 const sonnets = require('./sonnets.js');
-const syl = require('syllabificate');
 
 var corsOptions = {
   origin: [
