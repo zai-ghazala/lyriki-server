@@ -19,7 +19,7 @@ function getSentences(text) {
   let sentences = [];
   text.split('. ').map(function (sentence) {
     if (
-      sentence.split(' ').length > 3 && syl.countSyllables(sentence) > 7 && syl.countSyllables(sentence) < 13 && !sentence.split('').includes('.')
+      sentence.split(' ').length > 3 && sentence.split(' ').length < 20 && !sentence.split('').includes('.')
     ) {
       sentences.push({
         sentence: sentence.split(' ').filter((val) => val !== ''),
