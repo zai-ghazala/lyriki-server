@@ -16,7 +16,7 @@ var corsOptions = {
 
 function getSentences(text) {
   let sentences = [];
-  text.match( /[^\.!\?]+[\.!\?]+|[^\.!\?]+/g ).map(function (sentence) {
+  text.match(/[^\.!\?]+[\.!\?]+|[^\.!\?]+/g).map(function (sentence) {
     if (
       sentence.split(' ').length > 3
     ) {
@@ -25,6 +25,7 @@ function getSentences(text) {
       });
     }
   });
+  console.log(sentences)
   return sentences;
 }
 
