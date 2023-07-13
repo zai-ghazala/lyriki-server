@@ -18,7 +18,7 @@ function getSentences(text) {
   let sentences = [];
   text.split('. ').map(function (sentence) {
     if (
-      sentence.split(' ').length > 3
+      sentence.split(' ').length > 3 && !sentence.includes('.') && !sentence.includes('\n')
     ) {
       sentences.push({
         sentence: sentence.split(' ').filter((val) => val !== ''),
