@@ -18,7 +18,7 @@ function getSentences(text) {
   let sentences = [];
   text.replace(/.+?(?:(?<![\s.]\p{Lu}|r|rof|s|rs|iss|o)[.!?]|$)/g, '|').split('|').map(function (sentence) {
     if (
-      sentence.split(' ').length > 3 && sentence.split(' ').length < 30 && !sentence.split('').includes('.') && !sentence.split('').includes('\n')
+      sentence.split(' ').length > 3 && !sentence.split('').includes('.') && !sentence.split('').includes('\n')
     ) {
       sentences.push({
         sentence: sentence.split(' ').filter((val) => val !== ''),
