@@ -16,7 +16,7 @@ var corsOptions = {
 
 function getSentences(text) {
   let sentences = [];
-  text.split('. ').map(function (sentence) {
+  text.split(/[!?.](?=\s+\p{Lu})/).map(function (sentence) {
     if (
       sentence.split(' ').length > 3 && sentence.split(' ').length < 20 && !sentence.split('').includes('.')
     ) {
