@@ -16,7 +16,7 @@ var corsOptions = {
 
 function getSentences(text) {
   let sentences = [];
-  text.match(/[^\.!\?]+[\.!\?]+|[^\.!\?]+/g).map(function (sentence) {
+  text.split('. ').map(function (sentence) {
     if (
       sentence.split(' ').length > 3
     ) {
