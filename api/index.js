@@ -25,7 +25,6 @@ function getSentences(text) {
       });
     }
   });
-  console.log(sentences)
   return sentences;
 }
 
