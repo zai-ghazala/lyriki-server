@@ -6,8 +6,8 @@ const sonnets = require('./sonnets.js');
 
 var corsOptions = {
   origin: [
-    'https://lyriki.zaiz.ai',
-    'https://www.lyriki.zaiz.ai',
+    'https://lyriki.ghazala.cc',
+    'https://www.lyriki.ghazala.cc',
     'http://127.0.0.1:5173',
     'http://localhost:5173',
   ],
@@ -28,7 +28,7 @@ function getSentences(text) {
   return sentences;
 }
 
-async function rhymeLastWord(text) {
+async function findRhymes(text) {
   const allRhymes = await Promise.all(
     getSentences(text).map(async function (x) {
       const last = x.sentence[x.sentence.length - 1];
@@ -61,7 +61,7 @@ async function requestDatamuse(word) {
 
 async function requestWiki(keyword) {
   const response = await fetch(
-    `https://simple.wikipedia.org/w/api.php?action=query&titles=${keyword}&prop=extracts&format=json`
+    `https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&explaintext=&titles=${keyword}`
   );
   const json = await response.json();
   const text = json.query.pages;
@@ -71,33 +71,15 @@ async function requestWiki(keyword) {
   return cleaned;
 }
 
-function getSonnets() {
-  const matchableRhymes = [];
-
-  sonnets.forEach((x) => {
-    x.lines.forEach((y) => {
-      const last = y.split(' ').pop();
-      matchableRhymes.push({
-        sentence: y,
-        last,
-        title: x.title,
-        author: x.author,
-      });
-    });
-  });
-  return matchableRhymes;
-}
-
 async function couplet(keyword) {
   try {
     const wiki = await requestWiki(keyword)
-    const text = await rhymeLastWord(wiki);
-    const matchableRhymes = getSonnets();
+    const text = await findRhymes(wiki);
 
     let couplets = [];
     let ret;
     text.forEach((x) => {
-      matchableRhymes.forEach((y) => {
+      text.forEach((y) => {
         if (
           x.rhymes.includes(y.last) &&
           x.sentence.length > 3 &&
@@ -106,13 +88,14 @@ async function couplet(keyword) {
           couplets.push([x.sentence.join(' '), y.sentence]);
           const random =
             couplets[Math.floor(Math.random() * couplets.length)].join('\n');
-          ret = { message: random, title: y.title, author: y.author };
+          ret = { message: random };
         }
       });
     }); 
     return ret ? ret : { message: 'No rhymes found :(', error: true };
   }
   catch(error) {
+    console.log(error)
     return { message: 'No wiki article found :(', error: true };
   }
 }
